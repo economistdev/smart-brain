@@ -1,0 +1,19 @@
+.Tilt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 14vw;
+    width: 14vw;
+    font-size: 1vw;
+    background-image: linear-gradient(to right, rgb(215, 69, 69) 0%, rgb(61, 61, 130) 100% );
+}
+
+img {
+    height: 7vw;
+    width: 7vw;
+}
+
+h1 {
+    font-size: 0.5em;
+    color: rgb(70, 2, 16);
+}
