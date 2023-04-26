@@ -1,2 +1,6 @@
 # Ignore the node modules
 /node_modules
+
+.DS_Store
+
+README npm.md
