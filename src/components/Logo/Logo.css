@@ -8,7 +8,7 @@
     background-image: linear-gradient(to right, rgb(215, 69, 69) 0%, rgb(61, 61, 130) 100% );
 }
 
-img {
+.Tilt img {
     height: 7vw;
     width: 7vw;
 }

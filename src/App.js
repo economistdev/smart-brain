@@ -14,16 +14,35 @@ class App extends React.Component {
     super();
     this.state = {
       input: "",
-      imageUrl: ""
+      imageUrl: "",
+      box: {}
     }
   }
 
+  calculateFaceBox = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById("imageMain");
+    const height = Number(image.height);
+    const width = Number(image.width);
+    return({
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    })
+  }
+
+  displayFaceBox = (box) => {
+    console.log(box);
+    this.setState({box: box});
+  }
+
   onInputChange = (event) => {
-    this.setState({input: event.target.value})
+    this.setState({input: event.target.value});
   } 
 
   onButtonSubmit = () => {
-    this.setState({imageUrl: this.state.input})
+    this.setState({imageUrl: this.state.input});
 
     // Your PAT (Personal Access Token) can be found in the portal under Authentification
     const PAT = 'ccff492bb19341969fedc09115b04182';
@@ -64,10 +83,11 @@ class App extends React.Component {
       };
     }
 
+    console.log(returnClarifaiRequestOptions(this.state.imageUrl))
     fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", returnClarifaiRequestOptions(this.state.imageUrl))
-        .then(response => response.text())
-        .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+        .then(response => response.json())
+        .then(subResponse => this.displayFaceBox(this.calculateFaceBox(subResponse)))
+        .catch(error => console.log('Error Occured', error));
   }
 
   render() {
@@ -79,9 +99,8 @@ class App extends React.Component {
         <Rank />
         <ImageLinkForm 
           onInputChange={ this.onInputChange } 
-          onButtonSubmit={ this.onButtonSubmit } 
-        />
-        <FaceRecognition imageUrl={this.state.imageUrl}/>
+          onButtonSubmit={ this.onButtonSubmit }/>
+        <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
       </div>
     );
   }
