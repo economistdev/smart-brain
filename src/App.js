@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react'
 import Navigation from './components/Navigation/Navigation.js'
+import SignIn from './components/SignIn/SignIn.js'
 import Logo from './components/Logo/Logo.js'
 import Rank from './components/Rank/Rank.js'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.js'
@@ -15,7 +16,8 @@ class App extends React.Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {}
+      box: {},
+      route: "home"
     }
   }
 
@@ -90,21 +92,29 @@ class App extends React.Component {
         .catch(error => console.log('Error Occured', error));
   }
 
+  onRouteChange = (route) => {
+    this.setState({route: route})
+  }
+
   render() {
     return (
       <div className="App">
         <Particle />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm 
-          onInputChange={ this.onInputChange } 
-          onButtonSubmit={ this.onButtonSubmit }/>
-        <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
+        <Navigation onRouteChange={this.onRouteChange}/>
+        { this.state.route === "signin"
+        ? <SignIn onRouteChange={this.onRouteChange}/>
+        :<div> 
+            <Logo />
+            <Rank />
+            <ImageLinkForm 
+              onInputChange={ this.onInputChange } 
+              onButtonSubmit={ this.onButtonSubmit }/>
+            <FaceRecognition imageUrl={this.state.imageUrl} box={this.state.box}/>
+          </div>
+        }
       </div>
     );
   }
-
 }
 
 export default App;
